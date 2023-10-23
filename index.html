@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #btn_listen {
+            color: white;
+            background-color: black;
+            padding: 5px 10px 5px 10px;
+            border-radius: 10% ;
+        }
+    </style>
+</head>
+<body>
+    <textarea name="speech_text" id="speech_text" cols="30" rows="10"></textarea>
+    <select name="voice_list" id="voice_list">  
+    </select>
+    <button name="listen" id="btn_listen">Click to listen</button>
+</body>
+</html>
+<script>
+    let speech = new SpeechSynthesisUtterance();
+    let voices = [];
+    let voiceSelect = document.querySelector('select');
+    let listenBtn   = document.getElementById('btn_listen');
+    let speechText = document.getElementById('speech_text');
+
+    voices = window.speechSynthesis.getVoices();
+    let hasVoices = true;
+    if(voices.length === 0){
+        hasVoices = false;
+        voiceSelect.hidden = true;
+    }
+   
+    if(hasVoices){
+        voices.forEach((voice, i) => (
+        voiceSelect.options[i] = new Option(voice.name, i)
+        ));
+
+        voiceSelect.addEventListener('change', () => {
+            speech.voice = voices[voiceSelect.value];
+            }
+        );
+    }
+   
+    listenBtn.addEventListener(
+        "click", () => {
+            console.log(speech.voice);
+            speech.text = speechText.value;
+            window.speechSynthesis.speak(speech);
+        }
+    );
+
+</script>
